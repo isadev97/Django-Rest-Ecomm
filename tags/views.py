@@ -2,9 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from tags.serializers import CreateTagSerializer, ReadTagSerializer
 from tags.models import Tag
-from rest_framework import status
+from rest_framework import status, throttling
 from django.utils.text import slugify
 from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView
+from tags.filters import StandardResultsSetPagination, CustomThrottle
 
 class CreateTag(APIView):
 
@@ -23,8 +24,6 @@ class CreateTag(APIView):
         else:
             return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
 # simple api view
 class ListTagV1(APIView):
     
@@ -36,7 +35,12 @@ class ListTagV1(APIView):
 # list api view
 class ListTagV2(ListAPIView):
     queryset = Tag.objects.all()
+    # _class means a single class 
     serializer_class = ReadTagSerializer
+    # _class means a single class 
+    pagination_class = StandardResultsSetPagination
+    # _classes it means multiple classes / tuple of classes
+    throttle_classes = (CustomThrottle, )
     
 class TagDetailV1(APIView):
     
