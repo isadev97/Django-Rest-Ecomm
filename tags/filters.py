@@ -8,5 +8,5 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size' # dynamic page size client will send the page default is 10 max is 1000
     
 class CustomThrottle(UserRateThrottle):
-    rate = '3/hour'
+    rate = '300/hour'
     
