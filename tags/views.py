@@ -10,6 +10,7 @@ from tags.filters import StandardResultsSetPagination, CustomThrottle
 class CreateTag(APIView):
 
     def post(self, request):
+        print("authentication user", request.user)
         # serializer for incoming data
         create_serializer = CreateTagSerializer(data=request.data)
         if create_serializer.is_valid():
