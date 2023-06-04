@@ -8,7 +8,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView
 from tags.filters import StandardResultsSetPagination, CustomThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-
+from django.core.cache import cache
 
 class CreateTag(APIView):
 
@@ -54,6 +54,11 @@ class ListTagV2(ListAPIView):
 class TagDetailV1(APIView):
     
     def get(self, request, slug):
+        cache_key = f"tag-{slug}"
+        if cache.get(cache_key) is not None:
+            print("second time, third time, fourth time fetch from cache do not hit database")
+            cached_data = cache.get(cache_key)
+            return Response(cached_data)
         try:
             tag_object = Tag.objects.get(slug=slug)
         except Tag.DoesNotExist:
@@ -63,6 +68,8 @@ class TagDetailV1(APIView):
             error_response = {"error" : True, "message": "Multiple tags exist with the same slug"}
             return Response(error_response, status=status.HTTP_400_BAD_REQUEST)
         response_data = ReadTagSerializer(instance=tag_object).data 
+        print("first time db hit is done and setting up the cache")
+        cache.set(cache_key, response_data)
         return Response(response_data, status=status.HTTP_200_OK)
     
 class TagDetailV2(RetrieveAPIView):
