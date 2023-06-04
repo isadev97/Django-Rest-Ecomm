@@ -6,6 +6,9 @@ from rest_framework import status, throttling
 from django.utils.text import slugify
 from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView
 from tags.filters import StandardResultsSetPagination, CustomThrottle
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
 
 class CreateTag(APIView):
 
@@ -42,6 +45,11 @@ class ListTagV2(ListAPIView):
     pagination_class = StandardResultsSetPagination
     # _classes it means multiple classes / tuple of classes
     throttle_classes = (CustomThrottle, )
+    # filters
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['name',]
+    ordering_fields = ['created_at']
+    filterset_fields = ['id']
     
 class TagDetailV1(APIView):
     
