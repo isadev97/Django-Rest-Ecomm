@@ -39,7 +39,7 @@ class ListTagV1(APIView):
         
 # list api view
 class ListTagV2(ListAPIView):
-    queryset = Tag.objects.all()
+    # queryset = Tag.objects.all()
     permission_classes = (CustomPermission,)
     # _class means a single class 
     serializer_class = ReadTagSerializer
@@ -51,7 +51,10 @@ class ListTagV2(ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['name',]
     ordering_fields = ['created_at']
-    filterset_fields = ['id']
+    filterset_fields = ['slug']
+    
+    def get_queryset(self):
+        return Tag.objects.all()
 
 # in case you want to add single none class
 # pagination_class = None
