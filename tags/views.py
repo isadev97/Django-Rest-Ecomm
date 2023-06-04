@@ -9,6 +9,7 @@ from tags.filters import StandardResultsSetPagination, CustomThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.core.cache import cache
+from tags.permissions import CustomPermission
 
 class CreateTag(APIView):
 
@@ -39,6 +40,7 @@ class ListTagV1(APIView):
 # list api view
 class ListTagV2(ListAPIView):
     queryset = Tag.objects.all()
+    permission_classes = (CustomPermission,)
     # _class means a single class 
     serializer_class = ReadTagSerializer
     # _class means a single class 
@@ -50,6 +52,11 @@ class ListTagV2(ListAPIView):
     search_fields = ['name',]
     ordering_fields = ['created_at']
     filterset_fields = ['id']
+
+# in case you want to add single none class
+# pagination_class = None
+# in case you want to add multiple none class
+# authentication_classes = []
     
 class TagDetailV1(APIView):
     
