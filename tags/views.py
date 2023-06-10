@@ -10,8 +10,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.core.cache import cache
 from tags.permissions import CustomPermission
+from authentication.permissions import IsAdmin
 
 class CreateTag(APIView):
+    
+    permission_classes  = (IsAdmin, )
 
     def post(self, request):
         # serializer for incoming data

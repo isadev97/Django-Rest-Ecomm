@@ -5,6 +5,9 @@ from authentication.serializers import CreateUserSerializer
 from rest_framework import status
 
 class SignUpView(APIView):
+    
+    authentication_classes = []
+    permission_classes = []
 
     def post(self, request):
         create_serializer = CreateUserSerializer(data=request.data)
