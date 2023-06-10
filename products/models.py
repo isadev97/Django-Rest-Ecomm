@@ -9,4 +9,5 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+    price = models.BigIntegerField(default=0)
+    quantity = models.BigIntegerField(default=0)
