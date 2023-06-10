@@ -24,7 +24,6 @@ class ReadTagSerializer(serializers.ModelSerializer):
         
     def get_extra_field(self, tag_object):
         serialized_data = ExtraFieldSerializer(instance=tag_object).data
-        print("serialized_data", serialized_data)
         return serialized_data
     
         
